@@ -3,8 +3,15 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
 }
 
-group = "com.synclearn"
-version = "0.0.1"
+allprojects {
+    group = "com.synclearn"
+    version = "0.0.1"
+
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 
 java {
     toolchain {
@@ -33,8 +40,8 @@ subprojects {
 //        testImplementation("org.springframework.boot:spring-boot-starter-test")
 //        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-        compileOnly("org.projectlombok:lombok")
-        annotationProcessor("org.projectlombok:lombok")
+//        compileOnly("org.project lombok:lombok")
+//        annotationProcessor("org.project lombok:lombok")
         testImplementation(platform("org.junit:junit-bom:5.10.0"))
         testImplementation("org.junit.jupiter:junit-jupiter")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -6,13 +6,25 @@ import com.synclearn.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * User 도메인 모델 (DB/JPA와 완전히 분리)
- * 불변성을 유지하고 생성 시 도메인 규칙 검증
+ * SyncLearn 서비스의 사용자 도메인 모델.
+ * <p>
+ * 영속성 계층과 분리된 불변 객체로, 생성 시 필수 값 검증을 수행한다.
+ * </p>
+ *
+ * @param id 사용자를 식별하는 UUID (신규 생성 시 null 허용)
+ * @param email 로그인에 사용되는 이메일 주소
+ * @param nickname 서비스에 노출되는 닉네임
+ * @param password 암호화된 비밀번호 또는 소셜 가입 시 null
+ * @param provider 가입 경로를 나타내는 인증 제공자
+ * @param role 시스템 내 권한 등급
+ * @param status 현재 계정 상태
+ * @param createdAt 계정 생성 시각
  */
 public record User(
-        Long id,
+        UUID id,
         String email,
         String nickname,
         String password,
@@ -37,16 +49,12 @@ public record User(
         }
     }
 
-    /** 비밀번호 없이 소셜 가입하는 경우를 대비해 Optional */
+    /**
+     * 비밀번호 없이 소셜 가입하는 경우를 대비해 비밀번호 보유 여부를 확인한다.
+     *
+     * @return 비밀번호가 존재하고 공백이 아닌 경우 true, 그 외에는 false
+     */
     public boolean hasPassword() {
         return password != null && !password.isBlank();
-    }
-
-    /** 사용자 정보 업데이트를 위한 도메인 메서드 (새 User 반환) */
-    public User deactivate() {
-        return new User(
-                this.id, this.email, this.password, this.nickname,
-                this.provider, this.role, UserStatus.INACTIVE, this.createdAt
-        );
     }
 }

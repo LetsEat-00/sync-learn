@@ -4,15 +4,23 @@ import com.synclearn.user.enums.AuthProvider;
 import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+/**
+ * 사용자 정보를 영속화하는 JPA 엔티티.
+ * 도메인 모델 {@link User}와의 변환 헬퍼를 제공한다.
+ */
 @Entity
 @Table(name = "users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "UUID")
+    private UUID id;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
@@ -35,12 +43,13 @@ public class UserEntity {
     @Column(nullable = false, length = 20)
     private UserStatus status;
 
+    @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     protected UserEntity() { } // JPA 기본 생성자
 
-    private UserEntity(Long id, String email, String password, String nickname,
+    private UserEntity(UUID id, String email, String password, String nickname,
                        AuthProvider provider, UserRole role,
                        UserStatus status, LocalDateTime createdAt) {
         this.id = id;
@@ -53,7 +62,12 @@ public class UserEntity {
         this.createdAt = createdAt;
     }
 
-    // 도메인 -> 엔티티 변환
+    /**
+     * 도메인 모델을 영속 엔티티로 변환한다.
+     *
+     * @param user 변환 대상 사용자 도메인 모델
+     * @return 전달받은 값을 그대로 가진 엔티티 인스턴스
+     */
     public static UserEntity fromDomain(User user) {
         return new UserEntity(
                 user.id(),
@@ -67,13 +81,17 @@ public class UserEntity {
         );
     }
 
-    // 엔티티 -> 도메인 변환
+    /**
+     * 엔티티를 도메인 모델로 변환한다.
+     *
+     * @return 엔티티가 보유한 값을 복사한 도메인 모델
+     */
     public User toDomain() {
         return new User(
                 id,
                 email,
-                password,
                 nickname,
+                password,
                 provider,
                 role,
                 status,

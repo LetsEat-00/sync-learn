@@ -1,6 +1,8 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+
 plugins {
     id("java")
-    id("io.spring.dependency-management") version "1.1.6"
+    id("io.spring.dependency-management") version "1.1.6" apply false
 }
 
 allprojects {
@@ -20,8 +22,15 @@ java {
 }
 
 subprojects {
-    apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "io.spring.dependency-management")
+
+    // Spring Dependency Management 플러그인으로 BOM을 가져와 버전을 중앙 관리한다
+    configure<DependencyManagementExtension> {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:3.5.6")
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -40,8 +49,8 @@ subprojects {
 //        testImplementation("org.springframework.boot:spring-boot-starter-test")
 //        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-//        compileOnly("org.project lombok:lombok")
-//        annotationProcessor("org.project lombok:lombok")
+        compileOnly("org.projectlombok:lombok:1.18.42")
+        annotationProcessor("org.projectlombok:lombok:1.18.42")
         testImplementation(platform("org.junit:junit-bom:5.10.0"))
         testImplementation("org.junit.jupiter:junit-jupiter")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")

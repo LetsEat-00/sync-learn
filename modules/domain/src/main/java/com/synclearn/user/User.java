@@ -42,12 +42,4 @@ public record User(
     public boolean hasPassword() {
         return password != null && !password.isBlank();
     }
-
-    /** 사용자 정보 업데이트를 위한 도메인 메서드 (새 User 반환) */
-    public User deactivate() {
-        return new User(
-                this.id, this.email, this.password, this.nickname,
-                this.provider, this.role, UserStatus.INACTIVE, this.createdAt
-        );
-    }
 }

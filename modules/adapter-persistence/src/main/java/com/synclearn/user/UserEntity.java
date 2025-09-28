@@ -4,6 +4,8 @@ import com.synclearn.user.enums.AuthProvider;
 import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ public class UserEntity {
     @Column(nullable = false, length = 20)
     private UserStatus status;
 
+    @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -74,8 +77,8 @@ public class UserEntity {
         return new User(
                 id,
                 email,
-                password,
                 nickname,
+                password,
                 provider,
                 role,
                 status,

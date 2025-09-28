@@ -5,14 +5,16 @@ import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "UUID")
+    private UUID id;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
@@ -40,7 +42,7 @@ public class UserEntity {
 
     protected UserEntity() { } // JPA 기본 생성자
 
-    private UserEntity(Long id, String email, String password, String nickname,
+    private UserEntity(UUID id, String email, String password, String nickname,
                        AuthProvider provider, UserRole role,
                        UserStatus status, LocalDateTime createdAt) {
         this.id = id;

@@ -6,13 +6,14 @@ import com.synclearn.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * User 도메인 모델 (DB/JPA와 완전히 분리)
  * 불변성을 유지하고 생성 시 도메인 규칙 검증
  */
 public record User(
-        Long id,
+        UUID id,
         String email,
         String nickname,
         String password,

@@ -1,3 +1,5 @@
+package user;
+
 import com.synclearn.user.User;
 import com.synclearn.user.UserEntity;
 import com.synclearn.user.enums.AuthProvider;

@@ -5,6 +5,7 @@ import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
     @Id

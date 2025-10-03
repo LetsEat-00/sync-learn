@@ -1,7 +1,5 @@
-package user;
+package com.synclearn.user;
 
-import com.synclearn.user.User;
-import com.synclearn.user.UserEntity;
 import com.synclearn.user.enums.AuthProvider;
 import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;

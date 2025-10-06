@@ -3,6 +3,7 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 CREATE TABLE IF NOT EXISTS users (
     id         uuid        PRIMARY KEY,
+    provider_Id varchar(100),
     email      citext      NOT NULL,              -- 대소문자 무시
     password   varchar(255),
     nickname   varchar(20),

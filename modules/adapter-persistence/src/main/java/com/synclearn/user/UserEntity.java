@@ -4,6 +4,7 @@ import com.synclearn.user.enums.AuthProvider;
 import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
  * 사용자 정보를 영속화하는 JPA 엔티티.
  * 도메인 모델 {@link User}와의 변환 헬퍼를 제공한다.
  */
+@Data
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
@@ -23,6 +25,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "UUID")
     private UUID id;
+
+    @Column(unique = true, length = 100)
+    private String providerId;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
@@ -51,10 +56,11 @@ public class UserEntity {
 
     protected UserEntity() { } // JPA 기본 생성자
 
-    private UserEntity(UUID id, String email, String password, String nickname,
+    private UserEntity(UUID id,String providerId, String email, String password, String nickname,
                        AuthProvider provider, UserRole role,
                        UserStatus status, LocalDateTime createdAt) {
         this.id = id;
+        this.providerId = providerId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -73,6 +79,7 @@ public class UserEntity {
     public static UserEntity fromDomain(User user) {
         return new UserEntity(
                 user.id(),
+                user.providerId(),
                 user.email(),
                 user.password(),
                 user.nickname(),
@@ -91,6 +98,7 @@ public class UserEntity {
     public User toDomain() {
         return new User(
                 id,
+                providerId,
                 email,
                 nickname,
                 password,

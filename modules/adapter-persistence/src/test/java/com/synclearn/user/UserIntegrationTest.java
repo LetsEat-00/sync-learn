@@ -23,6 +23,7 @@ import com.synclearn.user.enums.UserRole;
 import com.synclearn.user.enums.UserStatus;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @DataJpaTest
 @Testcontainers
@@ -123,6 +124,7 @@ class UserIntegrationTest {
     void shouldPersistAndFindUser() {
         // given
         User domainUser = new User(
+                null,
                 null,
                 "alice@example.com",
                 "alice",

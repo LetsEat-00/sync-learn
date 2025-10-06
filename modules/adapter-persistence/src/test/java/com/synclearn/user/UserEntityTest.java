@@ -25,6 +25,7 @@ class UserEntityTest {
         UUID userId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         User domainUser = new User(
                 userId,
+                null,
                 "user@example.com",
                 "nickname",
                 "secret",
@@ -47,6 +48,7 @@ class UserEntityTest {
     void fromDomainShouldAllowNullId() {
         LocalDateTime createdAt = LocalDateTime.of(2024, 2, 3, 4, 5, 6);
         User domainUser = new User(
+                null,
                 null,
                 "new-user@example.com",
                 "newbie",
@@ -71,11 +73,12 @@ class UserEntityTest {
         LocalDateTime createdAt = LocalDateTime.of(2023, 12, 31, 23, 59, 59);
         User original = new User(
                 UUID.fromString("123e4567-e89b-12d3-a456-426614174111"),
+                null,
                 "legacy@example.com",
                 "legacy-nick",
                 "legacy-pass",
                 AuthProvider.LOCAL,
-                UserRole.MANAGER,
+                UserRole.ADMIN,
                 UserStatus.INACTIVE,
                 createdAt
         );

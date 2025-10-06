@@ -25,6 +25,7 @@ class UserTest {
         UUID id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         User user = new User(
                 id,
+                null,
                 "user@example.com",
                 "nickname",
                 "encrypted",
@@ -55,6 +56,7 @@ class UserTest {
                 new User(
                         UUID.randomUUID(),
                         null,
+                        null,
                         "nickname",
                         "encrypted",
                         AuthProvider.LOCAL,
@@ -75,6 +77,7 @@ class UserTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new User(
                         UUID.randomUUID(),
+                        null,
                         "invalid-email",
                         "nickname",
                         "encrypted",
@@ -94,6 +97,7 @@ class UserTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new User(
                         UUID.randomUUID(),
+                        null,
                         "user@example.com",
                         " ",
                         "encrypted",
@@ -111,6 +115,7 @@ class UserTest {
     @Test
     void hasPasswordReturnsFalseWhenPasswordIsNull() {
         User user = new User(
+                null,
                 null,
                 "user@example.com",
                 "nickname",
@@ -131,6 +136,7 @@ class UserTest {
     void hasPasswordReturnsFalseWhenPasswordIsBlank() {
         User user = new User(
                 null,
+                null,
                 "user@example.com",
                 "nickname",
                 " ",
@@ -149,6 +155,7 @@ class UserTest {
     @Test
     void hasPasswordReturnsTrueWhenPasswordExists() {
         User user = new User(
+                null,
                 null,
                 "user@example.com",
                 "nickname",

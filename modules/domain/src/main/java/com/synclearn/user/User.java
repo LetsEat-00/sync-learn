@@ -25,6 +25,7 @@ import java.util.UUID;
  */
 public record User(
         UUID id,
+        String providerId,
         String email,
         String nickname,
         String password,
@@ -56,5 +57,52 @@ public record User(
      */
     public boolean hasPassword() {
         return password != null && !password.isBlank();
+    }
+
+    /**
+     * GITHUB 가입 여부를 확인한다.
+     *
+     * @return 가입 경로 존재하고 GITHUB인 경우 true, 그 외에는 false
+     */
+    public boolean isGithub() {
+        return provider != null && provider == AuthProvider.GITHUB;
+    }
+
+    /**
+     * GitHub 에서 받은 유저 정보 컨버팅 메서드
+     *
+     * @return GitHub 정보를 유져 도메인으로 변환한 객체
+     */
+    public static User fromGithub(String providerId, String email, String name) {
+        return new User(
+                null,
+                providerId,
+                email,
+                name,
+                null,
+                AuthProvider.GITHUB,
+                UserRole.USER,
+                UserStatus.ACTIVE,
+                LocalDateTime.now()
+        );
+    }
+
+    /**
+     * GitHub 에서 받은 유저 정보 컨버팅 메서드
+     *
+     * @return GitHub 정보를 유져 도메인으로 변환한 객체
+     */
+    public static User fromLocal(String email, String password, String nickname) {
+        return new User(
+                null,
+                null,
+                email,
+                nickname,
+                password,
+                AuthProvider.LOCAL,
+                UserRole.USER,
+                UserStatus.ACTIVE,
+                LocalDateTime.now()
+        );
     }
 }

@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
 
+    -- TODO: 여기에 시발거 복합인덱스 넣기 해야함
+
     CONSTRAINT chk_users_provider CHECK (provider IN ('LOCAL','GITHUB')),
     CONSTRAINT chk_users_role     CHECK (role IN ('USER','ADMIN')),
     CONSTRAINT chk_users_status   CHECK (status IN ('ACTIVE','INACTIVE','DELETED')),

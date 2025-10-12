@@ -31,7 +31,16 @@ public class UserPersistenceAdapter implements UserRepository {
 
     @Override
     public User save(User user) {
-        jpaRepository.save(UserEntity.fromDomain(user));
-        return user;
+        return jpaRepository.save(UserEntity.fromDomain(user)).toDomain();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return jpaRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByProviderId(String providerId) {
+        return jpaRepository.existsByProviderId(providerId);
     }
 }

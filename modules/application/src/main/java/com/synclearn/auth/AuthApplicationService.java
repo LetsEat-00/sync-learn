@@ -1,21 +1,20 @@
 package com.synclearn.auth;
 
+import com.synclearn.security.SecurityRepository;
 import com.synclearn.user.User;
-import com.synclearn.user.UserEntity;
-import com.synclearn.user.UserJpaRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.synclearn.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthApplicationService {
 
-    private final UserJpaRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final SecurityRepository  securityRepository;
 
-    public AuthApplicationService(UserJpaRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthApplicationService(UserRepository userRepository, SecurityRepository securityRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.securityRepository = securityRepository;
     }
 
     /**
@@ -24,15 +23,14 @@ public class AuthApplicationService {
      */
     @Transactional
     public User registerFromOAuth(String providerId, String email, String name) {
-        // providerId 기준으로 기존 유저 확인
-        return userRepository.findByProviderId(providerId)
-                .map(UserEntity::toDomain)
-                .orElseGet(() -> {
-                    // 신규 가입: User 도메인 생성 후 엔티티로 변환 및 저장
-                    User domainUser = User.fromGithub(providerId, email, name);
-                    UserEntity saved = userRepository.save(UserEntity.fromDomain(domainUser));
-                    return saved.toDomain();
-                });
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("이미 가입된 이메일 입니다.");
+        }else if (userRepository.existsByProviderId(providerId)){
+            throw new IllegalArgumentException("이미 소셜을 통해 가입된 ID 입니다.");
+        }
+
+        // 신규 가입: User 도메인 생성 후 엔티티로 변환 및 저장
+        return userRepository.save(User.fromGithub(providerId, email, name));
     }
 
     /**
@@ -46,8 +44,7 @@ public class AuthApplicationService {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("이미 가입된 이메일 입니다.");
         }
-        String hashed = passwordEncoder.encode(rawPassword);
-        User domainUser = User.fromLocal(email, hashed, nickname);
-        return userRepository.save(UserEntity.fromDomain(domainUser)).toDomain();
+        User domainUser = User.fromLocal(email, securityRepository.pwEncrypt(rawPassword), nickname);
+        return userRepository.save(domainUser);
     }
 }

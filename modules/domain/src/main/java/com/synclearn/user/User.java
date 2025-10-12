@@ -73,12 +73,12 @@ public record User(
      *
      * @return GitHub 정보를 유져 도메인으로 변환한 객체
      */
-    public static User fromGithub(String providerId, String email, String name) {
+    public static User fromGithub(String providerId, String email, String nickname) {
         return new User(
                 null,
                 providerId,
                 email,
-                name,
+                nickname,
                 null,
                 AuthProvider.GITHUB,
                 UserRole.USER,
